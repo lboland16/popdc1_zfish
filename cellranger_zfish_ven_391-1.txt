@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#PBS -N CellRanger_count
+#PBS -l select=1:ncpus=32:mem=124gb
+#PBS -l walltime=24:00:00
+
+module load java
+
+# Set 'OD' to the directory you want CellRanger to save the output to. It will create the folder if it doesn't already exist.
+OD='/rds/general/user/lb616/projects/popdc1/ephemeral/lb616/count'
+mkdir -p $OD
+cd $OD
+
+# Folder that the cellranger program is in.
+PD="/rds/general/user/lb616/projects/popdc1/live/cellranger/cellranger-5.0.1"
+
+# Folder that the reference is in.
+REF="/rds/general/user/lb616/projects/popdc1/live/cellranger/Danio.rerio_genome"
+
+# Time records the amount of time the tool took and saves it to the error file.
+time ${PD}/cellranger count \
+--fastqs=\
+/rds/general/user/lb616/projects/popdc1/live/zfish_ven/40-450735014/00_fastq \
+--id=391-1 \
+--sample=391-1 \
+--transcriptome=$REF \
+--include-introns \
+--localcores=32 \
+--localmem=112 \
+--expect-cells=5000
